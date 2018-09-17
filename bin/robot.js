@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var clc = require('cli-color');
-var app = require('./index.js');
+var app = require('../index.js');
 var prompt = require('prompt');
 
 var info = clc.green;
@@ -30,7 +30,7 @@ var ask = function () {
             });
         }
         if (result.command.toLowerCase() === 'b') {
-            console.log("Please provide path to your file...");
+            console.log("Please provide path to your file... (current directory: "+__dirname.toLowerCase()+")");
             prompt.get('file', function (err, path) {
                 var fileName = path.file;
                 execute(fileName);
