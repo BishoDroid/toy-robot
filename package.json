@@ -2,15 +2,18 @@
   "name": "toy-robot",
   "version": "0.0.1",
   "description": "A command line application to create a robot that moves within defined dimensions",
+  "main": "index.js",
+  "bin": {
+    "robot": "./robot.js"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "node robot.js"
+  },
   "dependencies": {
     "cli-color": "^1.3.0",
     "prompt": "^1.0.0",
     "underscore": "^1.9.1"
-  },
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha",
-    "start": "node robot.js"
   },
   "devDependencies": {
     "chai": "^3.2.0",
