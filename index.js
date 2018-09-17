@@ -38,20 +38,34 @@ app.readAndParseFile = function(fileName, cb) {
 };
 
 /**
- * Run simulation using input file
- * @param {String} fileName File to run the simulation on
+ * Run simulation using a file or by passing by passing instructions
+ * @param {String} instructions - string of instructions or a file path to be used to run the simulation on
  * @param {Function} cb Callback function
  */
-app.runSimulation = function(fileName, cb) {
-    this.readAndParseFile(fileName, function(err, instructionList) {
-        if (err) {
-            cb(err);
-            return false;
-        }
+app.runSimulation = function(instructions, cb) {
+    //If it is a file
+    if(instructions.endsWith(".txt")){
+        this.readAndParseFile(instructions, function(err, instructionList) {
+            if (err) {
+                cb(err);
+                return false;
+            }
 
-        robot = robot.runInstructions(instructionList);
-        cb(null, robot);
-    });
+            robot = robot.runInstructions(instructionList);
+            cb(null, robot);
+        });
+    }
+    //Else, must be instructions. will be parsed then passed as options
+    else{
+        parser.parseParameters(instructions, function (err, instructionsList) {
+            if (err) {
+                cb(err);
+                return false;
+            }
+            robot = robot.runInstructions(instructionsList);
+            cb(null, robot);
+        });
+    }
 };
 
 module.exports = app;

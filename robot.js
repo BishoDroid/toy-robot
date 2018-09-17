@@ -4,11 +4,10 @@ var app = require('./index.js');
 var prompt = require('prompt');
 
 var info = clc.green;
-var warn = clc.yellow;
-var err = clc.red.bold;
+var error = clc.white.bgRed;
 var bold = clc.bold;
 
-console.log(info("Hello there, I am "+clc.bold("Robo Toy")));
+console.log(info("Hello there, I am " + clc.bold("Robo Toy")));
 console.log(info("I am a small program that is built to move within a 5 X 5 box in four direction" +
     "and I can also report my current coordinates"));
 console.log(info("You can either pass me your instructions in a file or directly via the command line in the following format:"));
@@ -19,18 +18,18 @@ console.log(clc.bgWhite(clc.black("PLACE 0,2,EAST --MOVE --MOVE --LEFT --REPORT"
  */
 var ask = function () {
     console.log(info('\nWould you like to interact with me or give mme instructions via a file?'))
-    console.log(bold('A: ')+'Interact'+'\n'+bold('B: ')+ 'Provide file');
+    console.log(bold('A: ') + 'Interact' + '\n' + bold('B: ') + 'Provide file');
 
     prompt.start();
 
     prompt.get('command', function (err, result) {
-        if(result.command.toLowerCase() === 'a'){
-            console.log("Please provide your commands tab-separated");
+        if (result.command.toLowerCase() === 'a') {
+            console.log("Please provide your commands separated with white space");
             prompt.get('commands', function (err, result) {
-                //TODO call a function in index.js to immediately use the given commands and execute
+                execute(result.commands);
             });
         }
-        if(result.command.toLowerCase() === 'b'){
+        if (result.command.toLowerCase() === 'b') {
             console.log("Please provide path to your file...");
             prompt.get('file', function (err, path) {
                 var fileName = path.file;
@@ -45,10 +44,10 @@ var execute = function (fileName) {
     /**
      * Run the simulation
      */
-    app.runSimulation(fileName, function(err, robot) {
+    app.runSimulation(fileName, function (err, robot) {
         // If error, let the user know
         if (err) {
-            console.log(clc.white.bgRed('ERROR:') + ' ' + clc.red(err.message));
+            console.log(error('ERROR:') + ' ' + clc.red(err.message));
             return false;
         }
 
@@ -60,16 +59,20 @@ var execute = function (fileName) {
         // Done, but ask if the user wants to continue
         console.log(clc.white('======================================================'));
         console.log(clc.blue('Your instructions have been executed!. Wanna give more instructions?'));
-        console.log(bold('Y: ')+ 'Yes, I would love to!')
-        console.log(bold('N: ')+'Nah, I am done!')
+        console.log(bold('Y: ') + 'Yes, I would love to!')
+        console.log(bold('N: ') + 'Nah, I am done!')
         prompt.start();
         prompt.get('answer', function (err, answer) {
-           if(answer.answer.toLowerCase() === 'n'){
-               return;
-           }
-           if(answer.answer.toLowerCase() === 'y'){
-               ask();
-           }
+            switch (answer.answer.toLowerCase()) {
+                case 'y':
+                    ask();
+                    break;
+                case 'n':
+                    return;
+                    break;
+                default:
+                    console.log(error('Invalid option'));
+            }
         });
     });
 };
