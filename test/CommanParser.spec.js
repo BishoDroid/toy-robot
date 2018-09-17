@@ -17,7 +17,6 @@ describe('Parser', function() {
 
     it('should correctly parse file contents into an array of instructions', function(done) {
         parser.parseParameters('PLACE 0,0,NORTH --MOVE --LEFT --RIGHT --REPORT', function(err, instructionList) {
-            console.log("TEST: "+JSON.stringify(instructionList));
             expect(instructionList).to.deep.equal([
                 {
                     command: 'place',
@@ -40,7 +39,6 @@ describe('Parser', function() {
 
     it('should not parse any unknown instructions', function(done) {
         parser.parseParameters('PLACE 0,0,NORTH --slartybartfast --marco polo --PLACE 0,1,north-west --MOVE --REPORT', function(err, instructionList) {
-            console.log("TEST: "+JSON.stringify(instructionList));
             expect(instructionList).to.deep.equal([
                 {
                     command: 'place',
