@@ -23,7 +23,7 @@ If you install it locally, you can use it within the directory via ```npm start`
 ```sh
 $ npm install
 $ npm start 
-$ node robot.js 
+$ node ./bin/robot.js 
 ```
 
 ## Instruction format
